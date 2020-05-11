@@ -5,29 +5,41 @@ interface TProvider {
   children: React.ReactNode
 }
 
+interface TConsumer {
+  children: (value: any) => typeof value
+}
+
 
 export default <T extends{}>(theme: T) => {
-   const Theme = React.createContext<T>(theme) 
+   const ThemeContext = React.createContext<T>(theme) 
 
   const withTheme = <P extends{ }>(Component: TComponent<P & {theme: T}>) : React.SFC<P>  => {
     return function(props: React.PropsWithChildren<P>) {
       return (
-        <Theme.Consumer>
+        <ThemeContext.Consumer>
           { (value: T) => <Component {...props} theme={value} />}
-        </Theme.Consumer>
+        </ThemeContext.Consumer>
       )
     }
   }
 
   const ThemeProvider = ({children}: TProvider) => (
-    <Theme.Provider value={theme}>
+    <ThemeContext.Provider value={theme}>
       {children}
-    </Theme.Provider>
+    </ThemeContext.Provider>
+  )
+
+  const ThemeConsumer = ({children}: TConsumer) => (
+    <ThemeContext.Consumer>
+      {children}
+    </ThemeContext.Consumer>
   )
 
   return {
     withTheme,
     ThemeProvider,
+    ThemeConsumer,
+    ThemeContext,
   }   
     
 }

@@ -1,24 +1,18 @@
 import * as React from 'react'
-import { withTheme, ThemeContext } from '../../theme'
+import { updateTheme } from '../../theme'
 import { Button, ButtonProps } from './index'
 
 type TComponent<T> = React.ComponentType<T>
-const withCustomTheme = <P extends{ }, C>(Component: TComponent<P>, custom: C): React.SFC<P>  => {
-  return function(props: P) {
-    const theme = React.useContext(ThemeContext)
-    return ( <Component {...props} theme = {{
-      ...theme,
-      ...customTheme,
-    }} />)
+
+
+export const CustomButton = updateTheme<ButtonProps>(Button, (theme) => {
+  const style = {
+    colors: {
+      ...theme.colors,
+      primary: 'hotpink',
+      secondary: 'black'
+    }
   }
-}
+  return style
 
-const customTheme = {
-  colors: {
-    primary: 'hotpink',
-  }
-}
-
-type CustomTheme = typeof customTheme
-
-export const CustomButton = withCustomTheme<ButtonProps, CustomTheme>(Button, customTheme)
+})

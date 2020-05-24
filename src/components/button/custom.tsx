@@ -6,9 +6,12 @@ type TComponent<T> = React.ComponentType<T>
 
 
 export const CustomButton = updateTheme<ButtonProps>(Button, (theme) => {
+  const {colors, ...rest} = theme
+ 
   const style = {
+    ...rest,
     colors: {
-      ...theme.colors,
+      ...colors,
       primary: 'hotpink',
       secondary: 'black'
     }

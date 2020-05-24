@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 type TComponent<T> = React.ComponentType<T>
+type TElement<T> = React.ReactElement<any>
 interface TProvider {
   children: React.ReactNode
 }
@@ -8,7 +9,6 @@ interface TProvider {
 interface TConsumer {
   children: (value: any) => typeof value
 }
-
 
 export default <T extends{}>(theme: T) => {
 
@@ -29,11 +29,11 @@ export default <T extends{}>(theme: T) => {
     }
   }
 
-  const updateTheme = <P extends {}>(Base: TComponent<P>, styler: TStyle): React.SFC<P> => {
+  const updateTheme = <P extends {}>(Base: TComponent<P>, themer: TStyle): React.SFC<P> => {
   return function(props: any) {
       const ComponentToStyle = (props: P & {theme: T}) => {
-        const style = styler(props.theme)
-        return <Base {...props} theme={style} />
+        const updatedTheme = themer(props.theme)
+        return <Base {...props} theme={updatedTheme} />
       }
       return (
         <ThemeContext.Consumer>
@@ -43,6 +43,12 @@ export default <T extends{}>(theme: T) => {
   }
 
 }
+
+  /*const withStyle = (Base: TElement<any>, styler: TStyle): React.ReactElement<T> => {
+        const style = styler(props.theme)
+        return React.cloneElement(Base, {style})
+       
+  }*/
 
   const ThemeProvider = ({children}: TProvider) => (
     <ThemeContext.Provider value={theme}>

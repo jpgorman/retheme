@@ -10,10 +10,15 @@ const buttonThemer = (t: Theme) => ({
   color: t.colors.secondary
 })
 
-export const Button = withTheme<ButtonProps>((props) => {
-  const buttonTheme = buttonThemer(props.theme)
+const buttonStyler = (t: Theme) => {
+  const buttonTheme = buttonThemer(t)
   const style = {
     ...buttonTheme,
   }
+  return style
+}
+
+export const Button = withTheme<ButtonProps>((props) => {
+  const style = buttonStyler(props.theme)
   return <button style={style} {...props} />
 })
